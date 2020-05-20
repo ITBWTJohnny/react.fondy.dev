@@ -102,10 +102,11 @@ $callbackFromFondy = function (Psr\Http\Message\ServerRequestInterface $request)
     );
 };
 
-$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $routes) use ($main, $paymentRedirect, $requestFromFondy) {
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $routes) use ($main, $paymentRedirect, $requestFromFondy, $callbackFromFondy) {
     $routes->addRoute('GET', '/', $main);
     $routes->addRoute('GET', '/payment', $paymentRedirect);
     $routes->addRoute('POST', '/payment-redirect', $requestFromFondy);
+    $routes->addRoute('POST', '/payment-callback', $callbackFromFondy);
 });
 
 $server = new React\Http\Server(function (\Psr\Http\Message\ServerRequestInterface $request) use ($dispatcher) {
