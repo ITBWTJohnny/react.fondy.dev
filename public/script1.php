@@ -30,7 +30,8 @@ $paymentRedirect = function (Psr\Http\Message\ServerRequestInterface $request) u
         'order_desc' => 'Test order',
         'amount' => 3333,
         'currency' => 'UAH',
-        'response_url' => '176.32.13.135/payment-redirect',
+        'response_url' => 'https://johnny-dev.pp.ua/payment-redirect',
+        'server_callback_url' => 'https://johnny-dev.pp.ua/payment-callback',
     ];
 
     try {
@@ -83,8 +84,17 @@ $paymentRedirect = function (Psr\Http\Message\ServerRequestInterface $request) u
 };
 
 $requestFromFondy = function (Psr\Http\Message\ServerRequestInterface $request) {
-    $body = (string)$request->getBody();
-    var_dump('redirect body', $body);
+    return new React\Http\Response(
+        200,
+        array('Content-Type' => 'text/html'),
+        'Redirect page'
+    );
+};
+
+$callbackFromFondy = function (Psr\Http\Message\ServerRequestInterface $request) {
+    $body = (string)$request->getBody()->getContents();
+    var_dump('callback body', $body);
+
     return new React\Http\Response(
         200,
         array('Content-Type' => 'text/html'),
